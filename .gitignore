@@ -1,0 +1,37 @@
+# Specifies intentionally untracked files to ignore when using Git
+# http://git-scm.com/docs/gitignore
+
+rtclient/*~
+rtclient/*.sw[mnpcod]
+rtclient/*.log
+rtclient/*.tmp
+rtclient/*.tmp.*
+rtclient/log.txt
+rtclient/*.sublime-project
+rtclient/*.sublime-workspace
+rtclient/.vscode/
+rtclient/npm-debug.log*
+
+rtclient/.idea/
+rtclient/.ionic/
+rtclient/.sourcemaps/
+rtclient/.sass-cache/
+rtclient/.tmp/
+rtclient/.versions/
+rtclient/coverage/
+rtclient/dist/
+rtclient/node_modules/
+rtclient/tmp/
+rtclient/temp/
+rtclient/platforms/
+rtclient/plugins/
+rtclient/plugins/android.json
+rtclient/plugins/ios.json
+rtclient/www/
+rtclient/$RECYCLE.BIN/
+
+rtclient/.DS_Store
+rtclient/Thumbs.db
+rtclient/UserInterfaceState.xcuserstate
+
+rtserver/node_modules/
