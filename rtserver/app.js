@@ -10,6 +10,7 @@ import { typeDef as Turno, resolvers as turnoResolvers } from './graphql/turno';
 import { typeDef as Caja, resolvers as cajaResolvers } from './graphql/caja';
 import { typeDef as Puesto, resolvers as puestoResolvers } from './graphql/puesto';
 import { typeDef as Empleado, resolvers as empleadoResolvers } from './graphql/empleado';
+import { typeDef as Menu, resolvers as menuResolvers } from './graphql/menu';
 
 const 
 express = require('express'), 
@@ -26,11 +27,11 @@ resolvers = {};
 const schema = makeExecutableSchema({
     typeDefs: [
         Query, Mutation, Organizacion, Empresa, Sede, Area, Mesa, TipoTurno, Turno, Caja,
-        Puesto, Empleado
+        Puesto, Empleado, Menu
     ], 
     resolvers: merge(
         resolvers, organizacionResolvers, empresaResolvers, sedeResolvers, areaResolvers, mesaResolvers, tipoTurnoResolvers, turnoResolvers, cajaResolvers,
-        puestoResolvers, empleadoResolvers
+        puestoResolvers, empleadoResolvers, menuResolvers
     )
 });
 
