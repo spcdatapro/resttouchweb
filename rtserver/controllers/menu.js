@@ -21,7 +21,32 @@ class MenuController extends BaseController{
             tmp.push(ruta[i]);
         }
         return tmp.join(' - ');
-    }    
+    }
+
+    async getTreeMenu(level = 0, father = null, obj = []){
+        let filtro = { nivel: +level, debaja: false };
+        if(+level > 0 && father !== null && father !== undefined){ filtro.idpadre = father; }
+
+        const itemsMenu = await menu.find(filtro).exec();
+        for(let i = 0; i < itemsMenu.length; i++){
+            let itemMenu = itemsMenu[i];
+            obj.push({
+                _id: itemMenu._id,
+                ruta: itemMenu.ruta,
+                descripcion: itemMenu.descripcion,
+                nivel: itemMenu.nivel,
+                url: itemMenu.url,
+                icono: itemMenu.icono,
+                children: []
+            });
+        }
+
+        for(let i = 0; i < obj.length; i++){
+            await this.getTreeMenu(+level + 1, obj[i]._id, obj[i].children);
+        }
+
+        return obj;
+    }
 }
 
 module.exports = MenuController;

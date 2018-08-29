@@ -4,6 +4,7 @@ export const typeDef = `
     extend type Query {
         menus: [Menu]
         menu(_id: ID!): Menu
+        arbolMenu: [Arbol]
     }
 
     extend type Mutation{        
@@ -21,6 +22,16 @@ export const typeDef = `
         icono: String
         hijos: [Menu]
         debaja: Boolean
+    }
+
+    type Arbol {
+        _id: ID        
+        ruta: String
+        descripcion: String
+        nivel: Int
+        url: String
+        icono: String
+        children: [Arbol]
     }
 
     input CreateMenuInput{
@@ -51,6 +62,9 @@ export const resolvers = {
     
         menu: (root, { _id }) => {
             return MenuCtrl.read(_id);
+        },
+        arbolMenu: async () => {
+            return await MenuCtrl.getTreeMenu();
         }
     },
     Mutation:{
