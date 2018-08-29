@@ -1,9 +1,13 @@
 const UsuarioController = require('../controllers/usuario');
+const EmpleadoController = require('../controllers/empleado');
+const SedeController = require('../controllers/sede');
+const MenuController = require('../controllers/menu');
 
 export const typeDef = `
     extend type Query {
         usuarios: [Usuario]
         usuario(_id: ID!): Usuario
+        login(usr: String!, pwd: String!): UsuarioValido
     }
 
     extend type Mutation{        
@@ -12,7 +16,7 @@ export const typeDef = `
     }
 
     type Permiso {
-        idmenu: String!
+        menu: Menu
         c: Boolean
         r: Boolean
         u: Boolean
@@ -26,6 +30,15 @@ export const typeDef = `
         sedes: [Sede]
         permisos: [Permiso]
         debaja: Boolean
+    }
+
+    type UsuarioValido {
+        _id: ID!
+        nombre: String
+        apellido: String
+        usuario: String!
+        token: String!
+        logeado: Boolean!
     }
 
     input SedeInput{
@@ -50,6 +63,7 @@ export const typeDef = `
 
     input UpdateUsuarioInput{
         id: String!
+        idempleado: String
         usuario: String
         contrasenia: String
         sedes: [SedeInput]
@@ -59,6 +73,10 @@ export const typeDef = `
 `;
 
 const UsuarioCtrl = new UsuarioController();
+const EmpleadoCtrl = new EmpleadoController();
+const SedeCtrl = new SedeController();
+const MenuCtrl = new MenuController();
+const bcrypt = require('bcrypt-nodejs');
 export const resolvers = {
     Query: {
         usuarios: () => {
@@ -67,14 +85,48 @@ export const resolvers = {
     
         usuario: (root, { _id }) => {
             return UsuarioCtrl.read(_id);
+        },
+        login: (root, { usr, pwd }) => {
+            return UsuarioCtrl.login(usr, pwd);
         }
     },
     Mutation:{
-        createUsuario: (root, { input }) => {            
+        createUsuario: (root, { input }) => {
+            input.usuario = input.usuario.trim().toLowerCase();
+            input.contrasenia = bcrypt.hashSync(input.contrasenia);
             return UsuarioCtrl.create(input);
         },
-        updateUsuario: (root, { input }) => {            
+        updateUsuario: (root, { input }) => {
+            if(input.usuario !== null && input.usuario !== undefined){
+                if(input.usuario.trim() !== ''){
+                    input.usuario = input.usuario.trim().toLowerCase();
+                }else{
+                    delete input.usuario;
+                }
+            }
+
+            if(input.contrasenia !== null && input.contrasenia !== undefined){                
+                if(input.contrasenia.trim() !== ''){                    
+                    input.contrasenia = bcrypt.hashSync(input.contrasenia);
+                }else{
+                    delete input.contrasenia;                    
+                }
+            }
             return UsuarioCtrl.update(input.id, input);
+        }
+    },
+    Usuario: {
+        empleado: (usuario) => {
+            return EmpleadoCtrl.read(usuario.idempleado);
+        },
+        sedes: (usuario) => {            
+           const ids = usuario.sedes.map((u) => { return u.idsede; });
+           return SedeCtrl.filter({ _id: { $in: ids } });
+        }
+    },
+    Permiso: {
+        menu: (permiso) => {
+            return MenuCtrl.read(permiso.idmenu);
         }
     }
 };
