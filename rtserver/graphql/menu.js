@@ -4,7 +4,7 @@ export const typeDef = `
     extend type Query {
         menus: [Menu]
         menu(_id: ID!): Menu
-        arbolMenu: [Arbol]
+        arbolMenu: JSON
     }
 
     extend type Mutation{        

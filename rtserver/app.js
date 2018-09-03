@@ -1,5 +1,6 @@
 'use strict'
 import { merge } from 'lodash';
+import GraphQLJSON from 'graphql-type-json';
 import { typeDef as Organizacion, resolvers as organizacionResolvers } from './graphql/organizacion';
 import { typeDef as Empresa, resolvers as empresaResolvers } from './graphql/empresa';
 import { typeDef as Sede, resolvers as sedeResolvers } from './graphql/sede';
@@ -23,9 +24,9 @@ path = require('path'),
 cors = require('cors');
 
 const 
-Query = `scalar DateTime type Query {_empty: String}`, 
+Query = `scalar DateTime scalar JSON type Query {_empty: String}`, 
 Mutation = `type Mutation { _ : Boolean }`,
-resolvers = {};
+resolvers = { JSON: GraphQLJSON };
 const schema = makeExecutableSchema({
     typeDefs: [
         Query, Mutation, Organizacion, Empresa, Sede, Area, Mesa, TipoTurno, Turno, Caja,
