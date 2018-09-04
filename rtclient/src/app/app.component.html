@@ -1,3 +1,37 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-split-pane>
+    <ion-menu *ngIf="logged">
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>
+            <ion-item>
+              <ion-img slot="start" src="../assets/img/logors.svg" style="width: 30%; height: 20%;"></ion-img>
+              <ion-label>
+                <strong>Menú</strong>
+              </ion-label>
+            </ion-item>            
+          </ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-item-group *ngFor="let n0 of arbolMenu">
+          <ion-item-divider>
+            <ion-label>{{n0.descripcion}}</ion-label>            
+          </ion-item-divider>          
+          <ion-item-group *ngFor="let n1 of n0.children" lines="inset">
+            <ion-item-divider>
+              <ion-label style="padding-left: 5px !important;">{{n1.descripcion}}</ion-label>
+            </ion-item-divider>
+            <ion-menu-toggle auto-hide="false" *ngFor="let n2 of n1.children">
+              <ion-item lines="inset" [routerDirection]="'root'" [routerLink]="[n2.url]" >
+                <ion-icon [name]="n2.icono" slot="start" size="small" style="padding-left: 10px !important;"></ion-icon>
+                <ion-label>{{n2.descripcion}}</ion-label>
+              </ion-item>
+            </ion-menu-toggle>            
+          </ion-item-group>
+        </ion-item-group>
+      </ion-content>
+    </ion-menu>
+    <ion-router-outlet main></ion-router-outlet>
+  </ion-split-pane>  
 </ion-app>

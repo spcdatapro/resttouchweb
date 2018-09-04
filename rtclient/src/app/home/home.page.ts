@@ -11,10 +11,13 @@ import { presentAlert } from '../utilities';
 })
 export class HomePage {
 
+  public tituloPagina = 'Inicio';
+
   constructor(
     private localStorageSrvc: LocalStorageService,
     private router: Router
-  ) { }
+  ) {
+  }
 
   async logout() {
     await presentAlert({
