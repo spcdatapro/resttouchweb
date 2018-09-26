@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, DoCheck } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -13,7 +13,7 @@ import { LocalStorageService } from './services/localstorage.service';
   templateUrl: 'app.component.html',
   providers: [MenuService, LocalStorageService]
 })
-export class AppComponent {
+export class AppComponent implements DoCheck {
 
   public logged: false;
   private arbolMenu: ArbolMenu;
@@ -27,10 +27,6 @@ export class AppComponent {
   ) {
     this.initializeApp();
     this.loadArbolMenu();
-    const usrLogged = this.localStorageSrvc.get('rtusr');
-    if (usrLogged !== null && usrLogged !== undefined) {
-      this.logged = usrLogged.logeado;
-    }
   }
 
   initializeApp() {
@@ -38,6 +34,13 @@ export class AppComponent {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
+  }
+
+  ngDoCheck() {
+    const usrLogged = this.localStorageSrvc.get('rtusr');
+    if (usrLogged !== null && usrLogged !== undefined) {
+      this.logged = usrLogged.logeado;
+    }
   }
 
   loadArbolMenu() {

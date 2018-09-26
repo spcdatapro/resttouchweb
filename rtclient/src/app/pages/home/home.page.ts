@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../services/localstorage.service';
-import { presentAlert } from '../utilities';
+import { LocalStorageService } from '../../services/localstorage.service';
+import { presentAlert } from '../../utilities';
 
 @Component({
   selector: 'app-home',

@@ -4,7 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { MinilogoComponent } from '../components/minilogo/minilogo.component';
+// import { MinilogoComponent } from '../components/minilogo/minilogo.component';
 import { HomePage } from './home.page';
 
 @NgModule({
@@ -19,6 +19,6 @@ import { HomePage } from './home.page';
       }
     ])
   ],
-  declarations: [HomePage, MinilogoComponent]
+  declarations: [HomePage]
 })
 export class HomePageModule {}
