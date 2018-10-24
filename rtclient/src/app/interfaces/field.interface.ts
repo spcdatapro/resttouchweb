@@ -21,5 +21,6 @@ export interface FieldConfig {
     dateDisplayFormat?: string;
     datePickerFormat?: string;
     isChecked?: boolean;
+    esInvisible?: boolean;
     validations?: Validator[];
 }

@@ -10,10 +10,10 @@
 </ion-header>
 <ion-content padding>
   <ion-list>
-    <ion-item [hidden]="formaVisible">
+    <ion-item [hidden]="formaHidden">
       <app-dynamic-form [fields]="regConfig" (submit)="submit($event)"></app-dynamic-form>
     </ion-item>
-    <ion-item-divider [hidden]="formaVisible"></ion-item-divider>
+    <ion-item-divider [hidden]="formaHidden"></ion-item-divider>
     <ion-item *ngIf="cardItems.length > 0">
       <app-dynamic-grid [cardItems]="cardItems" (itemClick)="itemClick($event)" (trashClick)="trashClick($event)"></app-dynamic-grid>
     </ion-item>
@@ -22,5 +22,5 @@
     (crear)="toggleFormVisibility($event, false)" 
     (cancelar)="toggleFormVisibility($event, true)" 
     [fabBtnConfig]="fabBtnConfig">
-  </app-form-fab-icon-group>  
+  </app-form-fab-icon-group>
 </ion-content>

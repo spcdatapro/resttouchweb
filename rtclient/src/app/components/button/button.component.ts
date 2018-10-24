@@ -5,7 +5,7 @@ import { FieldConfig } from '../../interfaces/field.interface';
 @Component({
   selector: 'app-button',
   template: `
-    <ion-button [type]="field.btnType" [color]="field.color" [formGroup]="group">
+    <ion-button [type]="field.btnType" [color]="field.color" [formGroup]="group" shape="round">
       <ion-icon
         slot="icon-only" [name]="field.ionIconName" *ngIf="field.ionIconName && field.ionIconName.length > 0 && field.iconOnly">
       </ion-icon>

@@ -1,0 +1,13 @@
+<ion-fab [vertical]="configuracion.vertical" [horizontal]="configuracion.horizontal" [slot]="configuracion.slot">
+  <ion-fab-button [color]="configuracion.moreColor">
+    <ion-icon name="more"></ion-icon>
+  </ion-fab-button>
+  <ion-fab-list side="start">
+    <ion-fab-button [color]="configuracion.cancelColor" (click)="cancelClick($event)" [hidden]="fabBtnConfig.cancelHidden">
+      <ion-icon name="close-circle-outline"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button [color]="configuracion.addColor" (click)="addClick($event)">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>

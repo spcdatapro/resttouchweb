@@ -12,6 +12,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { HomePage } from './pages/home/home.page';
 import { MenuPage } from './pages/menu/menu.page';
 import { OrganizacionPage } from './pages/organizacion/organizacion.page';
+import { EmpresaPage } from './pages/empresa/empresa.page';
+import { SedePage } from './pages/sede/sede.page';
 
 import { AppComponent } from './app.component';
 import { MinilogoComponent } from './components/minilogo/minilogo.component';
@@ -24,6 +26,9 @@ import { ValidationerrorComponent } from './components/validationerror/validatio
 import { CheckboxComponent } from './components/checkbox/checkbox.component';
 import { DynamicFieldDirective } from './components/dynamic-field/dynamic-field.directive';
 import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.component';
+import { DynamicGridComponent } from './components/dynamic-grid/dynamic-grid.component';
+import { FormFabIconGroupComponent } from './components/form-fab-icon-group/form-fab-icon-group.component';
+import { FilterPipe } from './pipes/filter.pipe';
 
 @NgModule({
   declarations: [
@@ -31,6 +36,8 @@ import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.com
     HomePage,
     MenuPage,
     OrganizacionPage,
+    EmpresaPage,
+    SedePage,
     MinilogoComponent,
     InputComponent,
     ButtonComponent,
@@ -39,7 +46,10 @@ import { DynamicFormComponent } from './components/dynamic-form/dynamic-form.com
     ValidationerrorComponent,
     CheckboxComponent,
     DynamicFieldDirective,
-    DynamicFormComponent
+    DynamicFormComponent,
+    DynamicGridComponent,
+    FormFabIconGroupComponent,
+    FilterPipe
   ],
   entryComponents: [InputComponent, ButtonComponent, SelectComponent, DateComponent, ValidationerrorComponent, CheckboxComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, ApolloBoostModule, ReactiveFormsModule, FormsModule],

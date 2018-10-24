@@ -18,52 +18,43 @@ const
 express = require('express'), 
 bodyParser = require('body-parser'), 
 path = require('path'),
-{ graphqlExpress, graphiqlExpress } = require('apollo-server-express'),
+{ ApolloServer, gql } = require('apollo-server-express'),
 { makeExecutableSchema } = require('graphql-tools'),
 { GraphQLDate, GraphQLTime, GraphQLDateTime } = require('graphql-iso-date'),
 cors = require('cors');
 
 const 
 Query = `scalar DateTime scalar JSON type Query {_empty: String}`, 
-Mutation = `type Mutation { _ : Boolean }`,
-resolvers = { JSON: GraphQLJSON };
-const schema = makeExecutableSchema({
-    typeDefs: [
-        Query, Mutation, Organizacion, Empresa, Sede, Area, Mesa, TipoTurno, Turno, Caja,
-        Puesto, Empleado, Menu, Usuario
-    ], 
-    resolvers: merge(
-        resolvers, organizacionResolvers, empresaResolvers, sedeResolvers, areaResolvers, mesaResolvers, tipoTurnoResolvers, turnoResolvers, cajaResolvers,
-        puestoResolvers, empleadoResolvers, menuResolvers, usuarioResolvers
-    )
-});
+Mutation = `type Mutation { _ : Boolean }`;
 
 const app = express();
 
 //Middlewares de body-parser
-//app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors(), bodyParser.json());
 
 //const org_routes = require('./routes/organizacion'), empresa_routes = require('./routes/empresa');
 
-//Configuración de cabeceras y CORS
-/*
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-    res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
-    next();
-});
-*/
-
 //Rutas base
 //app.use('/', express.static('rtclient', { redirect: false })); //Esta linea se descomenta solo para servidor de producción
-const apiUrlPre = '/api';
+// const apiUrlPre = '/api';
 
 //GraphQL
-app.use('/graphql', graphqlExpress({ schema }));
-app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+const typeDefs = [
+    Query, Mutation, Organizacion, Empresa, Sede, Area, Mesa, TipoTurno, Turno, Caja,
+    Puesto, Empleado, Menu, Usuario
+];
+
+const resolvers = merge(
+    { JSON: GraphQLJSON }, organizacionResolvers, empresaResolvers, sedeResolvers, areaResolvers, mesaResolvers, tipoTurnoResolvers, turnoResolvers, cajaResolvers,
+    puestoResolvers, empleadoResolvers, menuResolvers, usuarioResolvers
+);
+
+const graphqlServer = new ApolloServer({typeDefs , resolvers});
+
+graphqlServer.applyMiddleware({ app });
+
+//app.use('/graphql', graphqlExpress({ schema }));
+//app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
 
 //app.use(apiUrlPre, org_routes);
 //app.use(apiUrlPre, empresa_routes);

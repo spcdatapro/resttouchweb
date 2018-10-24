@@ -1,0 +1,29 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="12">
+      <ion-input type="text" [(ngModel)]="searchText" placeholder="Texto de búsqueda..."></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngFor="let r of matriz; index as i; trackBy: trackByFnRows;">
+    <ion-col *ngFor="let c of r | filter: searchText; index as j; trackBy: trackByFnCols;" size="12" size-sm min-width="48px">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title (click)="cardItemClick($event, c._id, 'u')">{{c.titulo}}</ion-card-title>          
+          <ion-card-subtitle *ngIf="c.subtitulo && c.subtitulo.length > 0">{{c.subtitulo}}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content *ngIf="c.contenido && c.contenido.length > 0">          
+          <div [innerHTML]="c.contenido"></div>          
+        </ion-card-content>
+        <ion-item-divider></ion-item-divider>
+        <ion-buttons justify-content-end>
+          <ion-button (click)="cardItemClick($event, c._id, 'u')" [disabled]="c.debaja">
+            <ion-icon slot="icon-only" name="create"></ion-icon>
+          </ion-button>
+          <ion-button (click)="cardItemClick($event, c._id, 'd')">
+            <ion-icon slot="icon-only" color="danger" name="trash"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-card>
+    </ion-col>    
+  </ion-row>
+</ion-grid>

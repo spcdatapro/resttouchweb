@@ -14,15 +14,31 @@ export class CommonService {
 
   constructor(private apollo: Apollo) { }
 
-  getQuery(queryName: String, query: String, dataName, variables: any = {}): Observable<any> {
+  getQuery(queryName: String, query: String, dataName, variables: any = {}, fragmentos: string[] = []): Observable<any> {
+    const frags = fragmentos.join(' ');
     return this.apollo.watchQuery({
-      query: gql`query ${queryName} { ${query} }`,
-      variables: variables
+      query: gql`query ${queryName} { ${query} } ${frags}`,
+      variables: variables,
+      fetchPolicy: 'no-cache'
     }).valueChanges.pipe(
       map(
         ( { data } ) => data[dataName]
       )
     );
+  }
+
+  doMutation(mutationName: String, mutation: String, dataName, variables: any = {}, fragmentos: string[] = []): Observable<any> {
+    const frags = fragmentos.join(' ');
+    return this.apollo.mutate({
+      mutation: gql`mutation ${mutationName} { ${mutation} } ${frags}`,
+      variables: {input: variables},
+      fetchPolicy: 'no-cache'
+    }).pipe(
+      map(
+        ({ data }) => data[dataName]
+      )
+    )
+    ;
   }
 
 }

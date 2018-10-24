@@ -2,17 +2,18 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators } from '@angular/forms';
 import { FieldConfig } from '../../interfaces/field.interface';
 import { DynamicFormComponent } from '../../components/dynamic-form/dynamic-form.component';
-import { Organizacion } from '../../interfaces/organizacion.interface';
-import { OrganizacionService } from '../../services/organizacion.service';
+import { Sede } from '../../interfaces/sede.interface';
+import { SedeService } from '../../services/sede.service';
+import { EmpresaService } from '../../services/empresa.service';
 import { presentAlert } from '../../utilities';
 
 @Component({
-  selector: 'app-organizacion',
-  templateUrl: './organizacion.page.html',
-  styleUrls: ['./organizacion.page.scss'],
-  providers: [OrganizacionService]
+  selector: 'app-sede',
+  templateUrl: './sede.page.html',
+  styleUrls: ['./sede.page.scss'],
+  providers: [EmpresaService, SedeService]
 })
-export class OrganizacionPage implements OnInit {
+export class SedePage implements OnInit {
 
   @ViewChild(DynamicFormComponent) form: DynamicFormComponent;
 
@@ -38,6 +39,21 @@ export class OrganizacionPage implements OnInit {
       ]
     },
     {
+      type: 'select',
+      label: 'Empresa',
+      name: 'idempresa',
+      options: [],
+      okText: 'Aceptar',
+      cancelText: 'Cancelar',
+      validations: [
+        {
+          name: 'required',
+          validator: Validators.required,
+          message: 'El campo Empresa es requerido.'
+        }
+      ]
+    },
+    {
       type: 'button',
       btnType: 'submit',
       color: 'primary',
@@ -46,25 +62,37 @@ export class OrganizacionPage implements OnInit {
     }
   ];
 
-  tituloPagina = 'Organización';
-  entidades: Organizacion[] = [];
-  entidad: Organizacion = { _id: null, nombre: null };
+  tituloPagina = 'Sede';
+  entidades: Sede[] = [];
+  entidad: Sede = { _id: null };
   cardItems: any[] = [];
-  formaVisible = true;
+  formaHidden = true;
   fabBtnConfig = {
-    cancelHidden: this.formaVisible
+    cancelHidden: this.formaHidden
   };
 
   constructor(
-    private organizacionSrvc: OrganizacionService
-    ) {  }
+    private sedeSrvc: SedeService,
+    private empresaSrvc: EmpresaService
+  ) { }
 
   ngOnInit() {
+    this.loadEmpresas();
     this.loadEntidades();
   }
 
+  loadEmpresas() {
+    this.empresaSrvc.listaEntidades().subscribe((data) => {
+      const options: any[] = [];
+      data.forEach((emp) => {
+        options.push({ _id: emp._id, descripcion: emp.nombre });
+      });
+      this.regConfig[2].options = options;
+    });
+  }
+
   resetEntidad() {
-    this.entidad = { _id: null, nombre: null };
+    this.entidad = { _id: null };
     this.form.form.reset();
   }
 
@@ -74,24 +102,26 @@ export class OrganizacionPage implements OnInit {
       this.cardItems.push({
         _id: item._id,
         titulo: item.nombre,
-        subtitulo: null,
-        debaja: item.debaja,
-        contenido: `<b>De baja:</b> ${item.debaja ? 'Sí' : 'No'}`
+        contenido: `
+        <b>Empresa:</b> ${item.empresa.nombre}<br/>
+        <b>De baja:</b> ${item.debaja ? 'Sí' : 'No'}
+        `
       });
     });
   }
 
   loadEntidades() {
-    this.organizacionSrvc.listaEntidades().subscribe((data) => {
+    this.sedeSrvc.listaEntidades().subscribe((data) => {
       this.entidades = data;
       this.setCardItems();
     });
   }
 
   toggleFormVisibility(ev: any, visibilidad: boolean) {
-    this.formaVisible = visibilidad;
-    this.fabBtnConfig.cancelHidden = this.formaVisible;
+    this.formaHidden = visibilidad;
+    this.fabBtnConfig.cancelHidden = this.formaHidden;
     if (visibilidad) { this.resetEntidad(); }
+    if (this.entidad._id) { this.resetEntidad(); }
   }
 
   private setFormValues() {
@@ -100,12 +130,12 @@ export class OrganizacionPage implements OnInit {
         this.form.form.controls[campo.name].setValue(this.entidad[campo.name]);
       }
     });
-    this.formaVisible = false;
-    this.fabBtnConfig.cancelHidden = this.formaVisible;
+    this.formaHidden = false;
+    this.fabBtnConfig.cancelHidden = this.formaHidden;
   }
 
   submit(value: any) {
-    this.organizacionSrvc.saveEntidad(value).subscribe((data) => {
+    this.sedeSrvc.saveEntidad(value).subscribe((data) => {
       this.entidad = data;
       this.loadEntidades();
       this.setFormValues();
@@ -114,7 +144,7 @@ export class OrganizacionPage implements OnInit {
 
   itemClick(itemId: string) {
     if (itemId) {
-      this.organizacionSrvc.getEntidad(itemId).subscribe((data) => {
+      this.sedeSrvc.getEntidad(itemId).subscribe((data) => {
         this.entidad = data;
         this.setFormValues();
       });
@@ -122,16 +152,16 @@ export class OrganizacionPage implements OnInit {
   }
 
   async trashClick(itemId: string) {
-    const ent = this.entidades.find( org => org._id === itemId );
+    const ent = this.entidades.find(obj => obj._id === itemId);
     await presentAlert({
       header: 'Dar de baja',
       subHeader: `${ent.nombre}`,
-      message: '¿Está seguro de dar de baja a esta organización?',
+      message: '¿Está seguro de dar de baja a esta sede?',
       buttons: [
         {
           text: 'Sí',
           handler: () => {
-            this.organizacionSrvc.trashEntidad(itemId).subscribe((data) => {
+            this.sedeSrvc.trashEntidad(itemId).subscribe((data) => {
               this.resetEntidad();
               this.loadEntidades();
             });

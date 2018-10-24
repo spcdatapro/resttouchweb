@@ -1,24 +1,25 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../services/localstorage.service';
-import { presentAlert } from '../../utilities';
+// import { LocalStorageService } from '../../services/localstorage.service';
+// import { presentAlert } from '../../utilities';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
-  providers: [LocalStorageService]
+  // providers: [LocalStorageService]
 })
 export class HomePage {
 
   public tituloPagina = 'Inicio';
 
   constructor(
-    private localStorageSrvc: LocalStorageService,
-    private router: Router
+    // private localStorageSrvc: LocalStorageService,
+    // private router: Router
   ) {
   }
 
+  /*
   async logout() {
     await presentAlert({
       header: 'Cerrar sesión',
@@ -41,4 +42,5 @@ export class HomePage {
       ]
     });
   }
+  */
 }

@@ -5,11 +5,11 @@ import { Validator } from '../../interfaces/field.interface';
 @Component({
   selector: 'app-validationerror',
   template: `
-    <ng-container *ngFor="let validation of validations">
+    <ion-item *ngFor="let validation of validations">
       <ion-label color="danger" *ngIf="group.get(fieldName).hasError(validation.name)">
         {{validation.message}}
       </ion-label>
-    </ng-container>
+    </ion-item>
   `,
   styles: []
 })

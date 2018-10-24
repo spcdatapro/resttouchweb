@@ -6,7 +6,9 @@ import { FieldConfig, Validator } from '../../interfaces/field.interface';
   selector: 'app-dynamic-form',
   template: `
     <form [formGroup]="form" (submit)="onSubmit($event)">
-      <ng-container *ngFor="let field of fields" appDynamicField [field]="field" [group]="form"></ng-container>
+      <ion-list>
+        <ng-container *ngFor="let field of fields" appDynamicField [field]="field" [group]="form"></ng-container>
+      </ion-list>
     </form>
   `,
   styles: []
